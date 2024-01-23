@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model BnbUser {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  hashedPassword  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  favoriteIds     String[] @db.ObjectId //An array of listing IDs that the user has marked as favorites.
+
+  accounts BnbAccount[] // A user can have multiple accounts (social logins, etc.).
+  listings BnbListing[]
+  reservations BnbReservation[] //A user can make multiple reservations.
+}
+
+model BnbAccount {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+
+  user BnbUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model BnbListing {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  description String
+  imageSrc String
+  createdAt DateTime @default(now())
+  category  String
+  roomCount Int
+  bathroomCount Int
+  guestCount Int
+  locationValue String
+  userId String @db.ObjectId
+  price Int
+
+  user BnbUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservations BnbReservation[]
+}
+
+model BnbReservation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  listingId String @db.ObjectId  
+  startDate DateTime
+  endDate DateTime
+  totalPrice Int
+  createdAt DateTime @default(now())
+
+  user BnbUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing BnbListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
