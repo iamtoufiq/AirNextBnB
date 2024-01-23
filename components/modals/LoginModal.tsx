@@ -89,13 +89,17 @@ const LoginModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() =>
+          toast("Will implement later, now try normal login .", { icon: "🙏" })
+        }
       />
       <Button
         outline
         label="Continue with Github"
         icon={AiFillGithub}
-        onClick={() => {}}
+        onClick={() =>
+          toast("Will implement later, now try normal login .", { icon: "🙏" })
+        }
       />
       <div
         className="
