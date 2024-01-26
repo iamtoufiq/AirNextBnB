@@ -47,7 +47,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
           input: () => "text-lg",
           option: () => "text-lg",
         }}
-        theme={(theme: { colors: any }) => ({
+        theme={(theme: { colors: any; spacing: any }) => ({
           ...theme,
           borderRadius: 6,
           colors: {
