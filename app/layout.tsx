@@ -32,8 +32,7 @@ export default async function RootLayout({
           <RentModal />
           <LoginModal />
         </ClientOnly>
-
-        {children}
+        <div className="pb-20 pt-28">{children}</div>
       </body>
     </html>
   );
